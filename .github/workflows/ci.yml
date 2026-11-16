@@ -57,9 +57,23 @@ jobs:
 
             Guide d'installation : voir le site du projet.
 
-      # ---- Site : construit à chaque push, publié sur GitHub Pages seulement pour un tag
+      # ---- Site : construit à chaque push, publié sur GitHub Pages pour main et les tags.
+      # L'empreinte affichée est celle du ZIP téléchargeable : celui qu'on vient de
+      # publier (tag), sinon celui de la dernière release.
+      - name: Empreinte du ZIP publié
+        id: published
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            echo "sha256=${{ steps.zip.outputs.sha256 }}" >> "$GITHUB_OUTPUT"
+          elif gh release download --repo "$GITHUB_REPOSITORY" --pattern ma-copie-epub.zip --dir /tmp/rel 2>/dev/null; then
+            echo "sha256=$(sha256sum /tmp/rel/ma-copie-epub.zip | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+          fi
+
       - id: pages
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
         uses: actions/configure-pages@v6
 
       - name: Build site
@@ -67,17 +81,16 @@ jobs:
         env:
           SITE_URL: ${{ steps.pages.outputs.origin }}
           BASE_PATH: ${{ steps.pages.outputs.base_path }}
-          # L'empreinte n'est affichée que pour une version publiée (tag)
-          ZIP_SHA256: ${{ startsWith(github.ref, 'refs/tags/v') && steps.zip.outputs.sha256 || '' }}
+          ZIP_SHA256: ${{ steps.published.outputs.sha256 }}
         run: npm ci && npm run build
 
       - uses: actions/upload-pages-artifact@v5
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: steps.pages.outcome == 'success'
         with:
           path: site/dist
 
   deploy:
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
     needs: build
     runs-on: ubuntu-24.04
     environment:

@@ -208,16 +208,16 @@ const jsonLd = {
   <body>
     <div class="topbar">
       <div class="wrap topbar-inner">
-        <span>Le programme se lit gratuitement sur le site officiel :</span>
-        <a href={sourceUrl}>melenchon2027.fr</a>
+        <span class="topbar-intro">Le programme se lit gratuitement sur le site officiel :</span>
+        <a href={sourceUrl}><span class="long">melenchon2027.fr</span><span class="short">Site officiel</span></a>
         <span class="topbar-sep" aria-hidden="true">·</span>
-        <a href={paperUrl}>Acheter le livre (4,90 €, Éditions La Dispute)</a>
+        <a href={paperUrl}><span class="long">Acheter le livre (4,90 €, Éditions La Dispute)</span><span class="short">Acheter le livre · 4,90 €</span></a>
       </div>
     </div>
     <header class="hero">
       <div class="wrap hero-grid">
         <div class="hero-text">
-          <p class="tag">Projet indépendant · copie privée prévue par la loi</p>
+          <p class="tag">Projet indépendant · copie privée<span class="tag-more"> prévue par la loi</span></p>
           <h1>Ma copie<br />EPUB</h1>
           <p class="lede">
             Une extension pour Chrome qui fabrique, dans votre navigateur, votre copie personnelle du programme publié
@@ -832,6 +832,16 @@ const jsonLd = {
   .topbar { background: var(--plum); color: #fff; font-size: 0.92rem; }
   .topbar-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.6rem; padding-top: 0.6rem; padding-bottom: 0.6rem; }
   .topbar a { font-weight: 700; color: var(--light); }
+  .topbar .short { display: none; }
+  @media (max-width: 40rem) { .tag-more { display: none; } }
+  /* Téléphone : deux liens courts côte à côte, sur une seule ligne */
+  @media (max-width: 40rem) {
+    .topbar-intro, .topbar-sep, .topbar .long { display: none; }
+    .topbar .short { display: inline; }
+    .topbar-inner { flex-wrap: nowrap; justify-content: center; gap: 0; padding-top: 0.55rem; padding-bottom: 0.55rem; }
+    .topbar a { flex: 1; text-align: center; font-size: 0.88rem; white-space: nowrap; text-underline-offset: 0.2em; }
+    .topbar a + a, .topbar a + .topbar-sep + a { border-left: 1px solid rgb(255 255 255 / 0.35); }
+  }
   .hero-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: 2rem 0 0; font-weight: 800; font-size: 1.2rem; }
   .hero-links a { color: var(--light); }
 

@@ -81,7 +81,7 @@ npm run package        # dist/ma-copie-epub.zip
 
 Si le site change de maquette, la génération s'arrête avec un message explicite plutôt que de produire un fichier incomplet. Le workflow « Structure du site » le détecte chaque semaine.
 
-**Publier une version** : mettre à jour `version` dans `extension/manifest.json` et `package.json`, puis pousser un tag `vX.Y.Z`. La CI teste, valide l'EPUB de test avec EPUBCheck, joint le ZIP à la release avec son empreinte SHA-256, puis déploie le site sur GitHub Pages en y affichant cette empreinte. Le site n'est déployé qu'au moment d'une version, pour que le lien de téléchargement et l'empreinte correspondent toujours. (À la première mise en place : *Settings → Pages → Source : GitHub Actions*.)
+**Publier une version** : mettre à jour `version` dans `extension/manifest.json` et `package.json`, puis pousser un tag `vX.Y.Z`. La CI teste, valide l'EPUB de test avec EPUBCheck, joint le ZIP à la release avec son empreinte SHA-256, puis déploie le site sur GitHub Pages en y affichant cette empreinte. Le site est aussi redéployé à chaque push sur `main`, avec l'empreinte de la dernière release : une correction du site ne demande pas de nouvelle version de l'extension. (À la première mise en place : *Settings → Pages → Source : GitHub Actions*.)
 
 Si le site source refuse l'accès automatique (codes 401, 403, 429, 503 ou page de vérification anti-robot), l'extension s'arrête avec un message explicite et ne tente jamais de contourner le blocage.
 
@@ -95,7 +95,7 @@ Les pull requests ne sont pas acceptées : elles sont fermées automatiquement. 
 
 | Workflow | Quand | Ce qu'il fait |
 |---|---|---|
-| `ci.yml` | chaque push, chaque tag `vX.Y.Z` | Tests, validation EPUBCheck de l'EPUB de test, ZIP de l'extension. Sur un tag : release GitHub avec le ZIP et son empreinte, puis déploiement du site sur GitHub Pages. |
+| `ci.yml` | chaque push, chaque tag `vX.Y.Z` | Tests, validation EPUBCheck de l'EPUB de test, ZIP de l'extension. Sur `main` : déploiement du site. Sur un tag : release GitHub avec le ZIP et son empreinte, puis déploiement du site. |
 | `check-site.yml` | chaque lundi | Vérifie la structure du site source et compare le texte à la version de référence (compteurs uniquement). Ouvre une issue si la structure change ou si le texte diffère. |
 | `close-pull-requests.yml` | à l'ouverture d'une PR | Ferme la PR avec un message renvoyant vers les issues (sauf Dependabot). |
 | Dependabot | chaque mois | Mises à jour des actions GitHub et des dépendances npm. |
