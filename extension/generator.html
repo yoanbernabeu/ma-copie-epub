@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ma copie EPUB</title>
+  <link rel="stylesheet" href="ui.css" />
+</head>
+<body class="generator">
+  <header class="hero">
+    <div class="wrap">
+      <p class="tag">Projet indépendant · copie privée</p>
+      <h1>Ma copie<br />EPUB</h1>
+      <p class="lede">Votre navigateur lit le programme page par page sur melenchon2027.fr, puis assemble le fichier sur votre ordinateur.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <section class="panel" aria-live="polite">
+        <form id="start" class="start" novalidate>
+          <label for="owner">Votre nom</label>
+          <input id="owner" name="owner" type="text" required minlength="2" maxlength="60" autocomplete="name" placeholder="Prénom Nom" />
+          <p class="help">Il sera inscrit sur la couverture et la page de garde de votre copie, avec la date et l’heure de création. Un pseudonyme convient aussi. Il n’est envoyé nulle part.</p>
+          <p id="owner-error" class="field-error" hidden></p>
+          <button class="btn" type="submit">Générer mon EPUB</button>
+        </form>
+
+        <div id="run" hidden>
+          <p id="status" class="status">Préparation…</p>
+          <progress id="progress" value="0" max="1"></progress>
+          <p id="detail" class="muted"></p>
+          <div class="actions">
+            <button id="cancel" class="btn secondary" type="button">Annuler</button>
+            <button id="download" class="btn" type="button" hidden>Télécharger à nouveau</button>
+            <button id="retry" class="btn" type="button" hidden>Relancer</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="reference" class="panel reference" hidden aria-live="polite">
+        <p id="ref-text" class="ref-text"></p>
+        <details id="ref-details" hidden>
+          <summary>Pages concernées</summary>
+          <ul id="ref-list"></ul>
+        </details>
+        <p class="muted">Cette information ne change rien à l’usage du fichier : il reste une copie privée, à ne pas rediffuser.</p>
+      </section>
+
+      <p class="notice">
+        <strong>Copie privée</strong>
+        Ce fichier est réservé à votre usage personnel (exception de copie privée,
+        <a id="law" href="#" target="_blank" rel="noopener">art. L122-5 2° du Code de la propriété intellectuelle</a>).
+        Ne le partagez pas : pour faire découvrir le programme, partagez plutôt le lien du site officiel. Le livre papier :
+        <a id="paper" href="#" target="_blank" rel="noopener"></a>.
+      </p>
+
+      <section id="next" class="next" hidden aria-labelledby="next-title">
+        <h2 id="next-title" style="margin-top: 2.5rem">Et maintenant ?</h2>
+        <p class="muted">Le fichier se trouve dans votre dossier Téléchargements.</p>
+        <ul class="devices">
+          <li><h3>Kobo, PocketBook, Vivlio</h3><p>Branchez la liseuse à l’ordinateur et copiez le fichier dans sa mémoire.</p></li>
+          <li><h3>Kindle</h3><p>Envoyez le fichier avec <a href="https://www.amazon.fr/sendtokindle" target="_blank" rel="noopener">Send to Kindle</a>.</p></li>
+          <li><h3>Téléphone, tablette</h3><p>Transférez-le, puis ouvrez-le avec Livres, Google Play Livres ou ReadEra.</p></li>
+          <li><h3>Ordinateur</h3><p>Apple Livres, <a href="https://thorium.edrlab.org/fr/" target="_blank" rel="noopener">Thorium Reader</a> ou Calibre.</p></li>
+        </ul>
+      </section>
+
+      <section id="summary" class="panel" hidden>
+        <dl class="summary">
+          <dt>Pages récupérées</dt><dd id="s-pages"></dd>
+          <dt>Pages en échec</dt><dd id="s-failed"></dd>
+          <dt>Taille</dt><dd id="s-size"></dd>
+          <dt>Fichier</dt><dd id="s-file"></dd>
+          <dt>Empreinte</dt><dd><code id="s-sha"></code></dd>
+        </dl>
+        <details id="warnings" hidden>
+          <summary>Avertissements</summary>
+          <ul id="warnings-list"></ul>
+        </details>
+        <details>
+          <summary>Empreintes des pages (SHA-256)</summary>
+          <ul id="hashes"></ul>
+        </details>
+      </section>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      Ma copie EPUB <span id="version"></span> · projet indépendant, sans lien avec La France insoumise · aucune donnée collectée ·
+      <a id="releases" href="#" target="_blank" rel="noopener">dernière version</a>
+    </div>
+  </footer>
+  <script type="module" src="generator.js"></script>
+</body>
+</html>

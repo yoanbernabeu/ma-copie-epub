@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Ma copie EPUB",
+  "version": "0.1.0",
+  "description": "Génère dans votre navigateur une copie EPUB personnelle du programme publié sur melenchon2027.fr. Projet indépendant, usage privé.",
+  "homepage_url": "https://github.com/yoanbernabeu/ma-copie-epub",
+  "minimum_chrome_version": "120",
+  "action": {
+    "default_title": "Ma copie EPUB",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "host_permissions": ["https://melenchon2027.fr/*"]
+}

@@ -1,0 +1,50 @@
+name: Structure du site
+
+# Vérifie chaque semaine que le site a toujours la structure attendue par
+# extension/src/config.js, et si le texte a changé depuis la version de
+# référence. Aucun texte n'est enregistré ni affiché : seulement des compteurs.
+# En cas d'échec, une issue est ouverte (une seule à la fois).
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - id: check
+        run: set -o pipefail; npm run check-site | tee check.log
+      - name: Signaler un changement de texte
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if grep -q "^Texte différent" check.log; then
+            gh label create "texte modifié" --color FBCA04 --force
+            if [ -z "$(gh issue list --label 'texte modifié' --state open --json number --jq '.[].number')" ]; then
+              gh issue create --label "texte modifié" --title "Le texte a changé depuis la version de référence" \
+                --body "Le contrôle hebdomadaire indique que le texte publié diffère de la version de référence du 9 novembre 2026 (voir le [journal](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})). L'extension l'affichera aux utilisateurs ; vérifier les mentions du site."
+            fi
+          fi
+      - name: Ouvrir une issue si la structure a changé
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create "site source" --color D93F0B --force
+          if [ -z "$(gh issue list --label 'site source' --state open --json number --jq '.[].number')" ]; then
+            gh issue create --label "site source" --title "La structure du site source a changé" \
+              --body "Le contrôle hebdomadaire a échoué : la génération risque d'échouer pour les utilisateurs. Voir le [journal](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}) et adapter \`extension/src/config.js\`."
+          fi

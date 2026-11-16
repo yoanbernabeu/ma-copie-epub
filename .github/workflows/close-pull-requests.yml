@@ -1,0 +1,25 @@
+name: Pull requests
+
+# Le projet fonctionne en « issue d'abord » : les pull requests sont fermées
+# automatiquement, avec un message qui renvoie vers les issues.
+# (Les mises à jour automatiques de Dependabot sont conservées.)
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  close:
+    if: github.event.pull_request.user.login != 'dependabot[bot]' && github.event.pull_request.user.login != github.repository_owner
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Fermer avec un message
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh pr close "$PR" --repo "$REPO" --comment "Merci ! Ce projet n'accepte pas de pull requests : chaque changement doit être vérifié au regard du cadre juridique (copie privée), il est donc implémenté par le mainteneur. Ouvrez plutôt une issue pour décrire votre proposition : https://github.com/$REPO/issues/new/choose"

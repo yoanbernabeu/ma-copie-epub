@@ -1,0 +1,23 @@
+name: Autre bug
+description: Installation, mise en forme du fichier, affichage sur une liseuse, site…
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Ne collez aucun extrait du programme.** Décrivez la mise en forme concernée et donnez l'adresse de la page sur melenchon2027.fr.
+  - type: textarea
+    id: what
+    attributes:
+      label: Ce qui se passe
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Ce qui était attendu
+  - type: input
+    id: env
+    attributes:
+      label: Version de l'extension, navigateur, liseuse ou application de lecture
+      placeholder: 0.1.0, Chrome 131, Kobo Clara

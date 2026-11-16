@@ -1,0 +1,17 @@
+{
+  "name": "ma-copie-epub",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Extension Chrome qui génère une copie EPUB personnelle, dans le navigateur de l'utilisateur.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/",
+    "fixture-epub": "node scripts/build-fixture-epub.mjs",
+    "check-site": "node scripts/check-site.mjs",
+    "package": "node scripts/package.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^27.0.0"
+  }
+}
